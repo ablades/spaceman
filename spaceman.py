@@ -12,8 +12,8 @@ def load_word():
     words_list = f.readlines()
     f.close()
 
-    words_list = words_list[0].split(' ')
     secret_word = random.choice(words_list)
+
     return secret_word
 
 def is_word_guessed(secret_word, letters_guessed):
@@ -45,10 +45,13 @@ def get_guessed_word(secret_word, letters_guessed):
         string: letters and underscores.  For letters in the word that the user has guessed correctly, the string should contain the letter at the correct position.  For letters in the word that the user has not yet guessed, shown an _ (underscore) instead.
     '''
     guessed_word = ''
-    for i, letter in enumerate(secret_word):
-        if letter == letters_guessed[i]:
-            guessed_word += letter
-        else:
+    #Check each letter in secret word against letters_guessed
+    for letter in secret_word:
+        for char in letters_guessed:
+            if letter == char:
+                guessed_word += char
+        #Add underscore for letters not in guessed word
+        if char not in guessed_word:
             guessed_word += '_'
     
     return guessed_word
@@ -71,19 +74,38 @@ def is_guess_in_word(guess, secret_word):
 
     return False
 
+#Checks for invalid guess
+def invalid_guess(guess):
+    if len(guess) > 1 or not guess.isalpha():
+        return True
+    else:
+        return False
+
+
 def spaceman(secret_word):
     '''
     A function that controls the game of spaceman. Will start spaceman in the command line.
 
     Args:
       secret_word (string): the secret word to guess.
-
     '''
-
+    guesses_left = len(secret_word)
+    letters_guessed = []
 
     #TODO: show the player information about the game according to the project spec
-
+    print(f"Welcome to spaceman! You have {guesses_left}. \n")
     #TODO: Ask the player to guess one letter per round and check that it is only one letter
+    guess = 'Placeholder'
+    while(invalid_guess(guess)):
+        guess = input("Please enter a letter to guess \n")
+
+    #Add guess to list
+    letters_guessed.append(guess)
+    #Check if guess is in secretword show word if not decrement guesses left and show word
+    if is_guess_in_word(guess, secret_word):
+        pass
+    else:
+        guesses_left -= 1
 
     #TODO: Check if the guessed letter is in the secret or not and give the player feedback
 
@@ -98,4 +120,4 @@ def spaceman(secret_word):
 
 #These function calls that will start the game
 secret_word = load_word()
-spaceman(load_word())
+spaceman(secret_word)
