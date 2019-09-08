@@ -27,8 +27,8 @@ def is_word_guessed(secret_word, letters_guessed):
     Returns: 
         bool: True only if all the letters of secret_word are in letters_guessed, False otherwise
     '''
-    for i, letter in enumerate(secret_word):
-        if letter != letters_guessed[i]:
+    for letter in secret_word:
+        if letter not in letters_guessed:
             return False
 
     return True
@@ -72,9 +72,13 @@ def is_guess_in_word(guess, secret_word):
 
     return False
 
-#Checks for invalid guess
-def invalid_guess(guess):
-    if len(guess) > 1 or not guess.isalpha():
+#Checks for invalid guesses True: Invalid Guesses False: Valid Guess
+def invalid_guess(guess, letters_guessed):
+    if guess in letters_guessed:
+        print(f"You have already guessed \033[96m{guess}\x1b[0m\n")
+        return True
+    #Checks if guess is length or is non alphabetic
+    elif len(guess) != 1 or not guess.isalpha():
         return True
     else:
         return False
@@ -88,34 +92,39 @@ def spaceman(secret_word):
       secret_word (string): the secret word to guess.
     '''
     guesses_left = len(secret_word)
+    correct_guesses = []
     letters_guessed = []
+    
 
-    print(f"Welcome to spaceman! You have {guesses_left} guesses left. \n")
+    print(f"Welcome to spaceman! You have \033[96m{guesses_left}\x1b[0m guesses left. \n")
 
+    #Run game until no guesses are left
     while(guesses_left > 0):
         guess = 'Placeholder'
-        while(invalid_guess(guess)):
+        #Check for invalid guesses
+        while(invalid_guess(guess, letters_guessed)):
             guess = input("Please enter a letter to guess \n")
 
         #Add guess to list
         letters_guessed.append(guess)
-        #Check if guess is in secretword show word if not decrement guesses left and show word
+        #Check if guess is in secret_word show word if not decrement guesses left and show word
         if is_guess_in_word(guess, secret_word):
-            letters_guessed.append(guess)
-            print(f"You Guessed {guess}. \n")
+            correct_guesses.append(guess)
+            print(f"Correct!! You Guessed \033[96m{guess}\x1b[0m \n")
         else:
             guesses_left -= 1
-            print(f"Incorrect guess. You have {guesses_left} guesses left. \n")
+            print(f"Incorrect guess. You have \033[96m{guesses_left}\x1b[0m guesses left. \n")
 
-        print(f"Current word state is {get_guessed_word(secret_word, letters_guessed)}. \n")
+        print(f"Current word state is \033[96m{get_guessed_word(secret_word, correct_guesses)}\x1b[0m \n")
 
-        if is_word_guessed(secret_word, letters_guessed):
-            print(f"You Won with {guesses_left} guesses left!!!\n")
+        if is_word_guessed(secret_word, correct_guesses):
+            print(f"You Won with \033[96m{guesses_left}\x1b[0m. guesses left!!!\n")
+            guesses_left = 0
 
-    print(f"The word was: {secret_word}")
+    print(f"The word was: \033[96m{secret_word}\x1b[0m.")
             
 
-#These function calls that will start the game
+
 play_again = "y"
 while play_again == "y":
     secret_word = load_word()
