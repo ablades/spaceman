@@ -11,7 +11,7 @@ def load_word():
     f = open('words.txt', 'r')
     words_list = f.readlines()
     f.close()
-
+    words_list = words_list[0].split(' ')
     secret_word = random.choice(words_list)
 
     return secret_word
@@ -45,14 +45,12 @@ def get_guessed_word(secret_word, letters_guessed):
         string: letters and underscores.  For letters in the word that the user has guessed correctly, the string should contain the letter at the correct position.  For letters in the word that the user has not yet guessed, shown an _ (underscore) instead.
     '''
     guessed_word = ''
-    #Check each letter in secret word against letters_guessed
+    #Check each letter in secret word
     for letter in secret_word:
-        for char in letters_guessed:
-            if letter == char:
-                guessed_word += char
-        #Add underscore for letters not in guessed word
-        if char not in guessed_word:
-            guessed_word += '_'
+        if letter in letters_guessed:
+            guessed_word += letter
+        else:
+          guessed_word += '_'
     
     return guessed_word
 
@@ -68,7 +66,7 @@ def is_guess_in_word(guess, secret_word):
         bool: True if the guess is in the secret_word, False otherwise
 
     '''
-    for letter in enumerate(secret_word):
+    for letter in secret_word:
         if guess == letter:
             return True
 
@@ -92,32 +90,35 @@ def spaceman(secret_word):
     guesses_left = len(secret_word)
     letters_guessed = []
 
-    #TODO: show the player information about the game according to the project spec
-    print(f"Welcome to spaceman! You have {guesses_left}. \n")
-    #TODO: Ask the player to guess one letter per round and check that it is only one letter
-    guess = 'Placeholder'
-    while(invalid_guess(guess)):
-        guess = input("Please enter a letter to guess \n")
+    print(f"Welcome to spaceman! You have {guesses_left} guesses left. \n")
 
-    #Add guess to list
-    letters_guessed.append(guess)
-    #Check if guess is in secretword show word if not decrement guesses left and show word
-    if is_guess_in_word(guess, secret_word):
-        pass
-    else:
-        guesses_left -= 1
+    while(guesses_left > 0):
+        guess = 'Placeholder'
+        while(invalid_guess(guess)):
+            guess = input("Please enter a letter to guess \n")
 
-    #TODO: Check if the guessed letter is in the secret or not and give the player feedback
+        #Add guess to list
+        letters_guessed.append(guess)
+        #Check if guess is in secretword show word if not decrement guesses left and show word
+        if is_guess_in_word(guess, secret_word):
+            letters_guessed.append(guess)
+            print(f"You Guessed {guess}. \n")
+        else:
+            guesses_left -= 1
+            print(f"Incorrect guess. You have {guesses_left} guesses left. \n")
 
-    #TODO: show the guessed word so far
+        print(f"Current word state is {get_guessed_word(secret_word, letters_guessed)}. \n")
 
-    #TODO: check if the game has been won or lost
+        if is_word_guessed(secret_word, letters_guessed):
+            print(f"You Won with {guesses_left} guesses left!!!\n")
 
-
-
-
-
+    print(f"The word was: {secret_word}")
+            
 
 #These function calls that will start the game
-secret_word = load_word()
-spaceman(secret_word)
+play_again = "y"
+while play_again == "y":
+    secret_word = load_word()
+    spaceman(secret_word)
+    play_again = input("Play again? (y/n): ")
+
