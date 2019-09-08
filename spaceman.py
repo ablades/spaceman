@@ -71,6 +71,49 @@ def is_guess_in_word(guess, secret_word):
             return True
 
     return False
+#Ascii art    
+def art():
+    spaceman = []
+    spaceman.append("             _..._")
+    spaceman.append("           .'     '.      _")
+    spaceman.append("          /    .-""-\   _/ \ ")
+    spaceman.append("        .-|   /:.   |  |   |")
+    spaceman.append("        |  \  |:.   /.-'-./")
+    spaceman.append("        | .-'-;:__.'    =/")
+    spaceman.append("        .'=  *=|NASA _.='")
+    spaceman.append("        /   _.  |    ;")
+    spaceman.append("        ;-.-'|    \   |")
+    spaceman.append("        /   | \    _\  _\ ")
+    spaceman.append("        \__/'._;.  ==' ==\ ")
+    spaceman.append("                \    \   |")
+    spaceman.append("                /    /   /")
+    spaceman.append("                /-._/-._/")
+    spaceman.append("               \   `\  \ ")
+    spaceman.append("                `-._/._/")
+    spaceman.append("       _____________________")
+    spaceman.append("       _____________________")
+    spaceman.append("       _____________________")
+    return spaceman
+
+def print_art(secret_word, guesses_left):
+    spaceman = art()
+    guesses_avaliable = len(secret_word)
+    size = len(spaceman)
+    step_size = size / guesses_avaliable
+    print_amount = guesses_avaliable - guesses_left
+
+    i = 0
+    step = 0
+    j = 0
+    while i < print_amount:
+        step = 0
+        while step < step_size and j < size:
+            print("\u001b[31m" + spaceman[j] + "\x1b[0m")
+            j += 1
+            step += 1
+
+        i += 1
+
 
 #Checks for invalid guesses True: Invalid Guesses False: Valid Guess
 def invalid_guess(guess, letters_guessed):
@@ -114,20 +157,44 @@ def spaceman(secret_word):
         else:
             guesses_left -= 1
             print(f"Incorrect guess. You have \033[96m{guesses_left}\x1b[0m guesses left. \n")
+            print_art(secret_word, guesses_left)
 
         print(f"Current word state is \033[96m{get_guessed_word(secret_word, correct_guesses)}\x1b[0m \n")
 
         if is_word_guessed(secret_word, correct_guesses):
-            print(f"You Won with \033[96m{guesses_left}\x1b[0m. guesses left!!!\n")
+            print(f"You Won with \033[96m{guesses_left}\x1b[0m guesses left!!!\n")
             guesses_left = 0
 
-    print(f"The word was: \033[96m{secret_word}\x1b[0m.")
+    print(f"The word was: \033[96m{secret_word}\x1b[0m")
             
 
 
 play_again = "y"
 while play_again == "y":
+    
     secret_word = load_word()
+    print_art(secret_word, 0)
     spaceman(secret_word)
     play_again = input("Play again? (y/n): ")
 
+print("Thanks for playing!")
+
+'''
+spaceman image taken from: https://www.asciiart.eu/space/astronauts
+        _..._
+      .'     '.      _
+     /    .-""-\   _/ \
+   .-|   /:.   |  |   |
+   |  \  |:.   /.-'-./
+   | .-'-;:__.'    =/
+   .'=  *=|NASA _.='
+  /   _.  |    ;
+ ;-.-'|    \   |
+/   | \    _\  _\
+\__/'._;.  ==' ==\
+         \    \   |
+         /    /   /
+         /-._/-._/
+  jgs    \   `\  \
+          `-._/._/
+'''
