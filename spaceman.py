@@ -185,7 +185,7 @@ def spaceman(secret_word):
         guess = 'Placeholder'
         #Check for invalid guesses
         while(invalid_guess(guess, letters_guessed)):
-            guess = input("Please enter a letter to guess: ")
+            guess = input("Please enter a letter to guess: ").lower()
 
         #Add guess to list
         letters_guessed.append(guess)
