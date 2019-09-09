@@ -16,6 +16,46 @@ def load_word():
 
     return secret_word
 
+'''
+#Changes the word to a different word of same length and guessed characters
+def change_word(guessed_word, words_list):
+
+    guessed_list = list(guessed_word)
+
+    word_dict = pass
+    contains_letters = False
+    word_choices = pass
+
+    #Get words from words list that have the same length
+    #Check all indexes in word for characters that have been guessed at same index
+    #if it contains all the letters in the right positions add it to a list of possible words
+    #if the length of that list is > 0 randomly choose a word
+    #if it is not keep the current word
+
+    for item in words_list:
+        countains_letters = False
+        for index, letter in enumerate(word_dict):
+
+
+    for index, letter in enumerate(word_dict):
+        contains_letters = False
+        for item in words_list:
+            if len(item) == guessed_word and item[index] == letter:
+                contains_letters = True
+            else:
+                contains_letters = False
+            
+            
+        if contains_letters:
+            #add that word to list
+            pass
+
+        TODO: Complete Sinister Spaceman
+'''
+
+
+
+
 def is_word_guessed(secret_word, letters_guessed):
     '''
     A function that checks if all the letters of the secret word have been guessed.
@@ -91,8 +131,7 @@ def art():
     spaceman.append("               \   `\  \ ")
     spaceman.append("                `-._/._/")
     spaceman.append("       _____________________")
-    spaceman.append("       _____________________")
-    spaceman.append("       _____________________")
+
     return spaceman
 
 def print_art(secret_word, guesses_left):
@@ -146,7 +185,7 @@ def spaceman(secret_word):
         guess = 'Placeholder'
         #Check for invalid guesses
         while(invalid_guess(guess, letters_guessed)):
-            guess = input("Please enter a letter to guess \n")
+            guess = input("Please enter a letter to guess: ")
 
         #Add guess to list
         letters_guessed.append(guess)
@@ -158,12 +197,17 @@ def spaceman(secret_word):
             guesses_left -= 1
             print(f"Incorrect guess. You have \033[96m{guesses_left}\x1b[0m guesses left. \n")
             print_art(secret_word, guesses_left)
+            print("\n")
 
         print(f"Current word state is \033[96m{get_guessed_word(secret_word, correct_guesses)}\x1b[0m \n")
 
         if is_word_guessed(secret_word, correct_guesses):
             print(f"You Won with \033[96m{guesses_left}\x1b[0m guesses left!!!\n")
             guesses_left = 0
+        elif guesses_left == 0:
+            print("You Lose.")
+
+        print("----------------------------------------------------------------------")
 
     print(f"The word was: \033[96m{secret_word}\x1b[0m")
             
