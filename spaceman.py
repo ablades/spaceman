@@ -16,42 +16,63 @@ def load_word():
 
     return secret_word
 
-'''
+
 #Changes the word to a different word of same length and guessed characters
-def change_word(guessed_word, words_list):
+def change_word(guessed_word, secret_word):
 
     guessed_list = list(guessed_word)
 
-    word_dict = pass
     contains_letters = False
-    word_choices = pass
+
+    f = open('words.txt', 'r')
+    words_list = f.readlines()
+    f.close()
+    words_list = words_list[0].split(' ')
+    similar_words = []
+
+    #Loop through word list and pull words of the same length
+    temp_list = []
+    for word in words_list:
+        if len(word) == len(guessed_word):
+            temp_list.append(word)
+        
+    words_list = temp_list
+
+    #Look at each word in list
+    for word in words_list:
+        contains_letters = False
+        #enumerate through word
+        for index, letter in enumerate(word):
+            #check index to make sure its alphabetic and contains the same letter
+            if guessed_list[index].isalpha() and guessed_list[index] == letter:
+                contains_letters = True
+            #Means index we are checking contains a character but does not match a guessed letter
+            elif guessed_list[index].isalpha() and guessed_list[index] != letter:
+                contains_letters = False
+
+        #Means contains letters in the same indicies 
+        if contains_letters:
+            similar_words.append(word)
+    
+    if len(similar_words) > 0:
+        secret_word =  random.choice(similar_words)
+
+    return secret_word
+
+
+        
+
+            
+            
+
+            
+                
 
     #Get words from words list that have the same length
     #Check all indexes in word for characters that have been guessed at same index
     #if it contains all the letters in the right positions add it to a list of possible words
     #if the length of that list is > 0 randomly choose a word
     #if it is not keep the current word
-
-    for item in words_list:
-        countains_letters = False
-        for index, letter in enumerate(word_dict):
-
-
-    for index, letter in enumerate(word_dict):
-        contains_letters = False
-        for item in words_list:
-            if len(item) == guessed_word and item[index] == letter:
-                contains_letters = True
-            else:
-                contains_letters = False
-            
-            
-        if contains_letters:
-            #add that word to list
-            pass
-
-        TODO: Complete Sinister Spaceman
-'''
 
 
 
@@ -206,6 +227,15 @@ def spaceman(secret_word):
             guesses_left = 0
         elif guesses_left == 0:
             print("You Lose.")
+        else:
+            guessed_word = get_guessed_word(secret_word, correct_guesses)
+            changed_word = change_word(guessed_word, secret_word)
+            if changed_word != secret_word:
+                print(secret_word)
+                secret_word = changed_word
+                print("Word has changed!")
+                print(changed_word)
+
 
         print("----------------------------------------------------------------------")
 
