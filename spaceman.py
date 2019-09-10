@@ -54,6 +54,7 @@ def change_word(guessed_word, secret_word):
         if contains_letters:
             similar_words.append(word)
     
+    #change word if one exists
     if len(similar_words) > 0:
         secret_word =  random.choice(similar_words)
 
@@ -210,6 +211,7 @@ def spaceman(secret_word):
 
         #Add guess to list
         letters_guessed.append(guess)
+
         #Check if guess is in secret_word show word if not decrement guesses left and show word
         if is_guess_in_word(guess, secret_word):
             correct_guesses.append(guess)
@@ -222,6 +224,7 @@ def spaceman(secret_word):
 
         print(f"Current word state is \033[96m{get_guessed_word(secret_word, correct_guesses)}\x1b[0m \n")
 
+        #Win Condition Check
         if is_word_guessed(secret_word, correct_guesses):
             print(f"You Won with \033[96m{guesses_left}\x1b[0m guesses left!!!\n")
             guesses_left = 0
@@ -235,6 +238,17 @@ def spaceman(secret_word):
                 secret_word = changed_word
                 print("Word has changed!")
                 print(changed_word)
+
+                #Retroactive letter check
+                for letter in letters_guessed:
+                    if is_guess_in_word(letter, secret_word) and letter not in correct_guesses:
+                        print(f"\033[96m{letter}\x1b[0m has been retroactively added")
+                        correct_guesses.append(letter)
+
+                if is_word_guessed(secret_word, correct_guesses):
+                    print("Congrats! You won retroactively.")
+
+
 
 
         print("----------------------------------------------------------------------")
