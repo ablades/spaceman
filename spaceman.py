@@ -40,14 +40,11 @@ def change_word(guessed_word, secret_word):
 
     #Look at each word in list
     for word in words_list:
-        contains_letters = False
-        #enumerate through word
+        contains_letters = True
+        #iterate through word
         for index, letter in enumerate(word):
-            #check index to make sure its alphabetic and contains the same letter
-            if guessed_list[index].isalpha() and guessed_list[index] == letter:
-                contains_letters = True
-            #Means index we are checking contains a character but does not match a guessed letter
-            elif guessed_list[index].isalpha() and guessed_list[index] != letter:
+            #Check if index contains a character but does not match a guessed letter
+            if guessed_list[index].isalpha() and guessed_list[index] != letter:
                 contains_letters = False
 
         #Means contains letters in the same indicies 
@@ -133,7 +130,8 @@ def is_guess_in_word(guess, secret_word):
             return True
 
     return False
-#Ascii art    
+
+#Ascii art creation
 def art():
     spaceman = []
     spaceman.append("             _..._")
@@ -156,6 +154,7 @@ def art():
 
     return spaceman
 
+#Print out spaceman based on number of guesses left
 def print_art(secret_word, guesses_left):
     spaceman = art()
     guesses_avaliable = len(secret_word)
@@ -181,9 +180,11 @@ def invalid_guess(guess, letters_guessed):
     if guess in letters_guessed:
         print(f"You have already guessed \033[96m{guess}\x1b[0m\n")
         return True
+
     #Checks if guess is length or is non alphabetic
     elif len(guess) != 1 or not guess.isalpha():
         return True
+
     else:
         return False
 
@@ -216,6 +217,7 @@ def spaceman(secret_word):
         if is_guess_in_word(guess, secret_word):
             correct_guesses.append(guess)
             print(f"Correct!! You Guessed \033[96m{guess}\x1b[0m \n")
+
         else:
             guesses_left -= 1
             print(f"Incorrect guess. You have \033[96m{guesses_left}\x1b[0m guesses left. \n")
@@ -226,35 +228,36 @@ def spaceman(secret_word):
 
         #Win Condition Check
         if is_word_guessed(secret_word, correct_guesses):
-            print(f"You Won with \033[96m{guesses_left}\x1b[0m guesses left!!!\n")
+            print(f"You Won with \033[96m{guesses_left}\x1b[0m guess(es) left!!!\n")
             guesses_left = 0
+
         elif guesses_left == 0:
             print("You Lose.")
+
+        #Attempt to change word
         else:
             guessed_word = get_guessed_word(secret_word, correct_guesses)
             changed_word = change_word(guessed_word, secret_word)
+
             if changed_word != secret_word:
-                print(secret_word)
                 secret_word = changed_word
                 print("Word has changed!")
-                print(changed_word)
 
                 #Retroactive letter check
                 for letter in letters_guessed:
                     if is_guess_in_word(letter, secret_word) and letter not in correct_guesses:
                         print(f"\033[96m{letter}\x1b[0m has been retroactively added")
                         correct_guesses.append(letter)
+                        print(f"New word state: \033[96m{get_guessed_word(secret_word, correct_guesses)}\x1b[0m")
 
+                #Retroactive win check
                 if is_word_guessed(secret_word, correct_guesses):
                     print("Congrats! You won retroactively.")
-
-
-
+                    guesses_left = 0
 
         print("----------------------------------------------------------------------")
 
     print(f"The word was: \033[96m{secret_word}\x1b[0m")
-            
 
 
 play_again = "y"
@@ -262,6 +265,7 @@ while play_again == "y":
     
     secret_word = load_word()
     print_art(secret_word, 0)
+    secret_word = "plate"
     spaceman(secret_word)
     play_again = input("Play again? (y/n): ")
 
