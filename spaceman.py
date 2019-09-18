@@ -307,3 +307,8 @@ def test_is_word_guessed():
     assert is_word_guessed('apple',['a','p','l','e']) == True, "Word is fully guessed but returns False when it should return True"
     assert is_word_guessed('apple', ['a', 'p']) == False, "Word was not guessed and returned True when it should have returned False"
     assert is_word_guessed('apple', ['a',' a', 'p', 'l', 'e']) == True, "Word was guessed but returned False when it should have returned True"
+
+def test_get_guessed_word():
+    assert get_guessed_word('apple',['a']) == 'a____', "A was guessed but string does not print properly"
+    assert get_guessed_word('apple',['a', 'p']) == 'app__', "A,P was guessed but string does not print properly"
+    assert get_guessed_word('apple',[]) == '_____', "No letters have been guessed but string prints improperly"
