@@ -260,16 +260,17 @@ def spaceman(secret_word):
     print(f"The word was: \033[96m{secret_word}\x1b[0m")
 
 
-play_again = "y"
-while play_again == "y":
-    
-    secret_word = load_word()
-    print_art(secret_word, 0)
-    secret_word = "plate"
-    spaceman(secret_word)
-    play_again = input("Play again? (y/n): ")
+if __name__ == "__main__":
+    play_again = "y"
+    while play_again == "y":
+        
+        secret_word = load_word()
+        print_art(secret_word, 0)
+        secret_word = "plate"
+        spaceman(secret_word)
+        play_again = input("Play again? (y/n): ")
 
-print("Thanks for playing!")
+    print("Thanks for playing!")
 
 '''
 spaceman image taken from: https://www.asciiart.eu/space/astronauts
@@ -290,3 +291,19 @@ spaceman image taken from: https://www.asciiart.eu/space/astronauts
   jgs    \   `\  \
           `-._/._/
 '''
+
+
+def test_invalid_guess():
+    assert invalid_guess('A',['A','B','C']) == True, "Guess was invalid when it should have been True"
+    assert invalid_guess('B', ['A','C','D']) == False, "Your guess was invalid when it should have been valid"
+    assert invalid_guess('sdlk', ['A', 'B']) == True, "Guess was invalid and should return True"
+
+def test_is_guess_in_word():
+    assert is_guess_in_word('x', 'apple') == False, "Uppercase guess was in word but not found"
+    assert is_guess_in_word('B', 'apple') == False, "Guess was not in word but was found"
+    assert is_guess_in_word('a', 'apple') == True, "Uppercase guess was in word but not found"
+
+def test_is_word_guessed():
+    assert is_word_guessed('apple',['a','p','l','e']) == True, "Word is fully guessed but returns False when it should return True"
+    assert is_word_guessed('apple', ['a', 'p']) == False, "Word was not guessed and returned True when it should have returned False"
+    assert is_word_guessed('apple', ['a',' a', 'p', 'l', 'e']) == True, "Word was guessed but returned False when it should have returned True"
